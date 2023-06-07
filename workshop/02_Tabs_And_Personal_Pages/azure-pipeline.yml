@@ -1,0 +1,173 @@
+# https://aka.ms/yaml
+variables:
+  # Staging 'sa1, sa2 sa3, ...'
+  # s - staging a - advanced => sa
+  nameSuffix: 'sa1'
+  appNamePrefix: 'shoppingapp1'
+
+trigger:
+- main
+
+stages:
+- stage: Build
+  displayName: Build stage
+  pool:
+    name: Azure Pipelines
+  variables:
+    buildPlatform: 'Any CPU'
+    buildConfiguration: 'Release'
+  jobs:
+    - job: Build_Solution
+      displayName: Whole solution build process
+      steps:
+      - task: DotNetCoreCLI@2
+        displayName: 'Build solution TabsAndPersonalPages.sln'
+        inputs:
+          command: build
+          projects: 'sources/BuildAppsForMicrosoftTeams.sln'
+          configuration: '$(buildConfiguration)'
+
+##################### Packing Artifacts Stage #####################
+
+- stage: Packing_Artifacts
+  displayName: Packing artifacts stage
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+  pool:
+    name: Azure Pipelines
+    vmImage: 'windows-latest'
+  variables:
+    buildPlatform: 'Any CPU'
+    buildConfiguration: 'Release'
+  jobs:
+  - job: Packing_Artifacts
+    displayName: Packing Artifacts
+    steps:
+    - task: NuGetCommand@2
+      displayName: 'Restore NuGet Packages'
+      inputs:
+        command: 'restore'
+        feedsToUse: 'config'
+        nugetConfigPath: 'sources/nuget.config'
+        restoreSolution: 'sources/ShoppingApp.sln'
+    
+    - task: DotNetCoreCLI@2
+      displayName: 'Build solution TabsAndPersonalPages.sln'
+      inputs:
+        command: build
+        projects: 'sources/BuildAppsForMicrosoftTeams.sln'
+        configuration: '$(buildConfiguration)'
+
+    - task: VSBuild@1
+      displayName: 'Publish TabsAndPersonalPages'
+      inputs:
+        solution: '$(Build.SourcesDirectory)/sources/src/TabsAndPersonalPages/*.csproj'
+        msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=FileSystem /p:publishUrl=$(Build.ArtifactStagingDirectory)/services/TabsAndPersonalPages'
+        platform: '$(buildPlatform)'
+        configuration: '$(buildConfiguration)'
+    
+    - task: ArchiveFiles@2
+      displayName: 'Pack TabsAndPersonalPages'
+      inputs:
+        rootFolderOrFile: '$(Build.ArtifactStagingDirectory)/services/TabsAndPersonalPages'
+        includeRootFolder: false
+        archiveType: 'zip'
+        archiveFile: '$(Build.ArtifactStagingDirectory)/services/TabsAndPersonalPages.zip'
+        replaceExistingArchive: true
+
+    - task: CopyFiles@2
+      displayName: 'Copy whole infrastructure deployment file'
+      inputs:
+        sourceFolder: '$(Build.SourcesDirectory)/sources/deploy'
+        contents: '*.bicep'
+        targetFolder: '$(Build.ArtifactStagingDirectory)/infrastructure/deploy'
+        cleanTargetFolder: true
+
+    - task: CopyFiles@2
+      displayName: 'Copy services deployment *.zip packages'
+      inputs:
+        sourceFolder: '$(Build.ArtifactStagingDirectory)/services'
+        contents: '*.zip'
+        targetFolder: '$(Build.ArtifactStagingDirectory)/services/deploy'
+        cleanTargetFolder: true
+    
+    - task: PublishPipelineArtifact@1
+      displayName: 'Publish whole infrastructure deployment file to Pipeline Artifacts'
+      inputs:
+        targetPath: '$(Build.ArtifactStagingDirectory)/infrastructure/deploy'
+        artifactName: 'infrastructure'
+    
+    - task: PublishPipelineArtifact@1
+      displayName: 'Publish services deployment *.zip packages to Pipeline Artifacts'
+      inputs:
+        targetPath: '$(Build.ArtifactStagingDirectory)/services/deploy'
+        artifactName: 'services'
+
+##################### Provision Infrastructure Stage #####################
+
+- stage: Provision_Infrastructure
+  displayName: Provision infrastructure stage
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+  pool:
+    name: Azure Pipelines
+  variables:
+    azureServiceConnection: 'DefaultAzureServiceConnection'
+    resourceGroupName: 'rg-$(appNamePrefix)-$(nameSuffix)'
+    location: 'eastus'
+    templateFile: '$(Pipeline.Workspace)/infrastructure/solution-infrastructure.bicep'
+  jobs:
+  - job: Deploy_Infrastructure
+    displayName: Deploy infrastructure in Azure
+    steps:
+    - task: DownloadPipelineArtifact@2
+      displayName: 'Download whole infrastructure deployment file'
+      inputs:
+        artifact: 'infrastructure'
+        path: $(Pipeline.Workspace)/infrastructure
+
+    - task: AzureCLI@2
+      displayName: 'Deploy the whole infrastructure to Azure'
+      inputs:
+        azureSubscription: 'DefaultAzureServiceConnection'
+        scriptType: 'pscore'
+        scriptLocation: 'inlineScript'
+        inlineScript: |
+          az --version
+          az group create --name $(resourceGroupName) --location $(location)
+          az deployment group create --resource-group $(resourceGroupName) `
+             --template-file $(templateFile) --parameters nameSuffix='$(nameSuffix)' `
+             appNamePrefix='$(appNamePrefix)'
+
+##################### Deploy Solution Stage #####################
+
+- stage: Deploy_Solution
+  displayName: Deploy solution stage
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+  pool:
+    name: Azure Pipelines
+    vmImage: 'windows-latest'
+  jobs:
+  - job: Deploy_Services
+    displayName: Services deploy process
+    workspace:
+      clean: all
+    steps:
+    - task: DeleteFiles@1
+      displayName: 'Remove services deployment *.zip packages'
+      inputs:
+        contents: '**/*'
+
+    - task: DownloadPipelineArtifact@2
+      displayName: 'Download services deployment *.zip packages'
+      inputs:
+        artifact: 'services'
+        path: $(Pipeline.Workspace)/services
+
+    - task: AzureRmWebAppDeployment@4
+      displayName: 'Deploy App'
+      inputs:
+        appType: webApp
+        ConnectionType: AzureRM            
+        ConnectedServiceName: 'DefaultAzureServiceConnection'
+        ResourceGroupName: 'rg-$(appNamePrefix)-$(nameSuffix)'
+        WebAppName: 'app-$(appNamePrefix)-$(nameSuffix)'
+        Package: '$(Pipeline.Workspace)/services/TabsAndPersonalPages.zip'

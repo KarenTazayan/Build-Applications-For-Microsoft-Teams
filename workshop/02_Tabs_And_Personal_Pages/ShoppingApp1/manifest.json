@@ -1,0 +1,44 @@
+{
+    "$schema": "https://developer.microsoft.com/json-schemas/teams/v1.16/MicrosoftTeams.schema.json",
+    "manifestVersion": "1.16",
+    "version": "1.0.0",
+    "id": "3c5c2d4f-4926-45c7-bbef-b480a0ff5b11",
+    "localizationInfo": {
+        "defaultLanguageTag": "en-us"
+    },
+    "developer": {
+        "name": "Build-App-For-Microsoft-Teams",
+        "websiteUrl": "https://github.com/KarenTazayan/Build-Applications-For-Microsoft-Teams/",
+        "privacyUrl": "https://app-shoppingapp1-sa1.azurewebsites.net/privacy",
+        "termsOfUseUrl": "https://app-shoppingapp1-sa1.azurewebsites.net/terms-of-use"
+    },
+    "name": {
+        "short": "ShoppingApp1",
+        "full": "Full name of app, if longer than 30 characters (<=100 chars)"
+    },
+    "description": {
+        "short": "Short description of your app (<= 80 chars)",
+        "full": "Full description of your app (<= 4000 chars)"
+    },
+    "icons": {
+        "outline": "outline.png",
+        "color": "color.png"
+    },
+    "accentColor": "#009900",
+    "permissions": [
+        "identity",
+        "messageTeamMembers"
+    ],
+    "configurableTabs": [],
+    "staticTabs": [
+        {
+          "entityId": "index",
+          "name": "Personal Tab",
+          "contentUrl": "https://app-shoppingapp1-sa1.azurewebsites.net/PersonalTab",
+          "websiteUrl": "https://app-shoppingapp1-sa1.azurewebsites.net/PersonalTab",
+          "scopes": [
+            "personal"
+          ]
+        }
+    ]
+}
