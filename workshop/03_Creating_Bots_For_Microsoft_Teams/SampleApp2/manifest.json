@@ -1,0 +1,71 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/teams/v1.16/MicrosoftTeams.schema.json",
+  "manifestVersion": "1.16",
+  "version": "1.0.0",
+  "id": "208d8269-0b86-4572-b9be-54ed77cd2a2f",
+  "localizationInfo": {
+    "defaultLanguageTag": "en-us"
+  },
+  "developer": {
+    "name": "Build-App-For-Microsoft-Teams",
+    "websiteUrl": "https://github.com/KarenTazayan/Build-Applications-For-Microsoft-Teams/",
+    "privacyUrl": "https://app-sampleapp1-sa1.azurewebsites.net/privacy",
+    "termsOfUseUrl": "https://app-sampleapp1-sa1.azurewebsites.net/terms-of-use"
+  },
+  "name": {
+    "short": "SampleApp2",
+    "full": "Full name of app, if longer than 30 characters (<=100 chars)"
+  },
+  "description": {
+    "short": "Short description of your app (<= 80 chars)",
+    "full": "Full description of your app (<= 4000 chars)"
+  },
+  "icons": {
+    "outline": "outline.png",
+    "color": "color.png"
+  },
+  "accentColor": "#009900",
+  "permissions": [
+    "identity",
+    "messageTeamMembers"
+  ],
+  "configurableTabs": [],
+  "staticTabs": [],
+  "bots": [
+    {
+      "botId": "09a8ad06-4306-42e0-9739-94e888672790",
+      "scopes": [
+        "personal",
+        "groupchat",
+        "team"
+      ],
+      "isNotificationOnly": false,
+      "supportsCalling": false,
+      "supportsVideo": false,
+      "supportsFiles": false,
+      "commandLists": [
+        {
+          "scopes": [
+            "personal",
+            "groupchat",
+            "team"
+          ],
+          "commands": [
+            {
+              "title": "MentionMe",
+              "description": "Sends message with @mention of the sender"
+            },
+            {
+              "title": "Show Welcome",
+              "description": "Shows the welcome card"
+            },
+            {
+              "title": "MessageAllMembers",
+              "description": "Send 1 to 1 message to all members of the current conversation"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

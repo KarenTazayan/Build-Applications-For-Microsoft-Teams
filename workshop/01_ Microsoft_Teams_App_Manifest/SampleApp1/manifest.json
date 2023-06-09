@@ -13,7 +13,7 @@
         "termsOfUseUrl": "https://example.com/app-tos"
     },
     "name": {
-        "short": "ShoppingApp1",
+        "short": "SampleApp1",
         "full": "Full name of app, if longer than 30 characters (<=100 chars)"
     },
     "description": {

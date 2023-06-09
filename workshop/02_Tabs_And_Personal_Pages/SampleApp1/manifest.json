@@ -9,11 +9,11 @@
     "developer": {
         "name": "Build-App-For-Microsoft-Teams",
         "websiteUrl": "https://github.com/KarenTazayan/Build-Applications-For-Microsoft-Teams/",
-        "privacyUrl": "https://app-shoppingapp1-sa1.azurewebsites.net/privacy",
-        "termsOfUseUrl": "https://app-shoppingapp1-sa1.azurewebsites.net/terms-of-use"
+        "privacyUrl": "https://app-sampleapp1-sa1.azurewebsites.net/privacy",
+        "termsOfUseUrl": "https://app-sampleapp1-sa1.azurewebsites.net/terms-of-use"
     },
     "name": {
-        "short": "ShoppingApp1",
+        "short": "SampleApp1",
         "full": "Full name of app, if longer than 30 characters (<=100 chars)"
     },
     "description": {
@@ -34,8 +34,8 @@
         {
           "entityId": "index",
           "name": "Personal Tab",
-          "contentUrl": "https://app-shoppingapp1-sa1.azurewebsites.net/PersonalTab",
-          "websiteUrl": "https://app-shoppingapp1-sa1.azurewebsites.net/PersonalTab",
+          "contentUrl": "https://app-sampleapp1-sa1.azurewebsites.net/PersonalTab",
+          "websiteUrl": "https://app-sampleapp1-sa1.azurewebsites.net/PersonalTab",
           "scopes": [
             "personal"
           ]
