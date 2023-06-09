@@ -42,11 +42,11 @@ stages:
     displayName: Packing Artifacts
     steps:
     - task: DotNetCoreCLI@2
-      displayName: 'Publish BuildAppsForMicrosoftTeams'
+      displayName: 'Publish TabsAndPersonalPages'
       inputs:
         command: build
-        projects: '$(Build.SourcesDirectory)/sources/src/BuildAppsForMicrosoftTeams/*.csproj'
-        arguments: '/p:DeployOnBuild=true /p:WebPublishMethod=FileSystem /p:publishUrl=$(Build.ArtifactStagingDirectory)/services/BuildAppsForMicrosoftTeams'
+        projects: '$(Build.SourcesDirectory)/sources/src/TabsAndPersonalPages/*.csproj'
+        arguments: '/p:DeployOnBuild=true /p:WebPublishMethod=FileSystem /p:publishUrl=$(Build.ArtifactStagingDirectory)/services/TabsAndPersonalPages'
         platform: '$(buildPlatform)'
         configuration: '$(buildConfiguration)'
 
