@@ -1,0 +1,31 @@
+{
+  "iisSettings": {
+    "windowsAuthentication": false,
+    "anonymousAuthentication": true,
+    "iisExpress": {
+      "applicationUrl": "http://localhost:3978",
+      "sslPort": 0
+    }
+  },
+  "$schema": "http://json.schemastore.org/launchsettings.json",
+  "profiles": {
+    "IIS Express": {
+      "commandName": "IISExpress",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    },
+    ".NET Core": {
+      "commandName": "Project",
+      "launchBrowser": true,
+        "environmentVariables": {
+            "ASPNETCORE_ENVIRONMENT": "Development",
+            "MicrosoftAppId": "08a912ed-8897-4aa1-be07-217e9a9b0f0c",
+            "MicrosoftAppPassword": "yiu8Q~lzkdS2yUPqjUyG0AVvXINRoSIVbi8Qbblg",
+            "BaseUrl": "https://0d6a-81-16-3-72.ngrok-free.app"
+        },
+      "applicationUrl": "https://localhost:3979;http://localhost:3978"
+    }
+  }
+}

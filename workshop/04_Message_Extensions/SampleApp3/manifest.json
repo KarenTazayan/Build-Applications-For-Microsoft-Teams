@@ -1,0 +1,162 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/teams/v1.16/MicrosoftTeams.schema.json",
+  "manifestVersion": "1.16",
+  "version": "1.0.0",
+  "id": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+  "localizationInfo": {
+    "defaultLanguageTag": "en-us"
+  },
+  "developer": {
+    "name": "Build-App-For-Microsoft-Teams",
+    "websiteUrl": "https://github.com/KarenTazayan/Build-Applications-For-Microsoft-Teams/",
+    "privacyUrl": "https://app-sampleapp3-sa1.azurewebsites.net/privacy",
+    "termsOfUseUrl": "https://app-sampleapp3-sa1.azurewebsites.net/terms-of-use"
+  },
+  "name": {
+    "short": "SampleApp3",
+    "full": "Full name of app, if longer than 30 characters (<=100 chars)"
+  },
+  "description": {
+    "short": "Short description of your app (<= 80 chars)",
+    "full": "Full description of your app (<= 4000 chars)"
+  },
+  "icons": {
+    "outline": "outline.png",
+    "color": "color.png"
+  },
+  "accentColor": "#009900",
+  "permissions": [
+    "identity",
+    "messageTeamMembers"
+  ],
+  "configurableTabs": [],
+  "staticTabs": [],
+  "bots": [
+    {
+      "botId": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+      "scopes": [
+        "personal",
+        "groupchat",
+        "team"
+      ],
+      "needsChannelSelector": false,
+      "isNotificationOnly": false,
+      "supportsCalling": false,
+      "supportsVideo": false,
+      "supportsFiles": false
+    }
+  ],
+  "composeExtensions": [
+    {
+      "botId": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+      "commands": [
+        {
+          "id": "createCard",
+          "type": "action",
+          "context": [ "compose" ],
+          "description": "Command to run action to create a Card from Compose Box",
+          "title": "Create Card",
+          "parameters": [
+            {
+              "name": "title",
+              "title": "Card title",
+              "description": "Title for the card",
+              "inputType": "text"
+            },
+            {
+              "name": "subTitle",
+              "title": "Subtitle",
+              "description": "Subtitle for the card",
+              "inputType": "text"
+            },
+            {
+              "name": "text",
+              "title": "Text",
+              "description": "Text for the card",
+              "inputType": "textarea"
+            }
+          ]
+        },
+        {
+          "id": "shareMessage",
+          "type": "action",
+          "context": [ "message" ],
+          "description": "Test command to run action on message context (message sharing)",
+          "title": "Share Message",
+          "parameters": [
+            {
+              "name": "includeImage",
+              "title": "Include Image",
+              "description": "Include image in Hero Card",
+              "inputType": "toggle"
+            }
+          ]
+        },
+        {
+          "id": "FetchRoster",
+          "description": "Fetch the conversation roster",
+          "title": "FetchRoster",
+          "type": "action",
+          "fetchTask": true,
+          "context": [ "compose" ]
+        },
+        {
+          "id": "createAdaptiveCard",
+          "type": "action",
+          "context": [ "compose" ],
+          "description": "Command to run action to create a Card from Compose Box",
+          "title": "Adaptive Card",
+          "parameters": [
+            {
+              "name": "title",
+              "title": "Name",
+              "description": "Name of the User",
+              "inputType": "text"
+            },
+            {
+              "name": "subTitle",
+              "title": "Designation",
+              "description": "Designation of the User",
+              "inputType": "text"
+            },
+            {
+              "name": "text",
+              "title": "Description",
+              "description": "Description",
+              "inputType": "textarea"
+            }
+          ]
+        },
+        {
+          "id": "webView",
+          "description": "Fetch the Web View",
+          "title": "Web View",
+          "type": "action",
+          "fetchTask": true,
+          "context": [ "compose" ]
+        },
+        {
+          "id": "HTML",
+          "description": "Fetch the HTML",
+          "title": "HTML",
+          "type": "action",
+          "fetchTask": true,
+          "context": [ "compose" ]
+        },
+        {
+          "id": "razorView",
+          "description": "Fetch the Razor View",
+          "title": "Razor View",
+          "type": "action",
+          "fetchTask": true,
+          "context": [ "compose" ]
+        }
+
+      ]
+    }
+  ],
+  "validDomains": [
+    "app-sampleapp3-sa1.azurewebsites.net",
+    "*.ngrok-free.app"
+  ]
+}
