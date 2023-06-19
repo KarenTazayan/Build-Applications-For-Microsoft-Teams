@@ -1,0 +1,11 @@
+﻿@page "/"
+
+<PageTitle>Incoming Webhook</PageTitle>
+
+<h1>Incoming Webhook Sample</h1>
+
+<input class="form-control input-lg" @bind="_webhookUrl" />
+<br />
+<span class="label label-info">Status: @_status</span>
+<br />
+<button class="btn btn-primary" @onclick="CallWebhook">Call Webhook</button>
